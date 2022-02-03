@@ -1,4 +1,4 @@
-#pragma comment (lib, "libmysql.lib")
+ï»¿#pragma comment (lib, "libmysql.lib")
 
 #include <winsock.h>
 #include <windows.h>
@@ -6,43 +6,63 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #define mysqlip "127.0.0.1"
-#define port 3306
+#define port 3366
 #define loginusername "root"
-#define loginpassword "mysql_p@ssw0rd"
+#define loginpassword ""
 #define mysqlname "bms"
 
-MYSQL * conn;
-MYSQL_RES* sql_result;
-MYSQL_ROW sql_row;
-int query_stat;
-
 int main() {
+	MYSQL* conn;
+	MYSQL_RES* result;
+	MYSQL_ROW row;
+	int query_stat;
+
+	unsigned int num_fields;
+	unsigned long* lengths;
+
+	int i = 0;
+
+	setlocale(LC_ALL, "ko_KR.UTF-8");
 	conn = mysql_init(NULL);
 	mysql_real_connect(conn, mysqlip, loginusername, loginpassword, mysqlname, port, NULL, 0);
 
 	if (conn == NULL) {
-		fprintf(stderr, "¿¬°á¿À·ù! : %s\n", mysql_error(conn));
+		fprintf(stderr, "ì—°ê²°ì˜¤ë¥˜! : %s\n", mysql_error(conn));
 		return EXIT_FAILURE;
 	}
 
-	printf("¿¬°á¼º°ø!\n");
-	printf("¼­¹ö¹öÀü %s\n", conn->server_version);
+	printf("ì—°ê²°ì„±ê³µ!\n");
+	printf("ì„œë²„ë²„ì „ %s\n", conn->server_version);
 
-	/*query_stat = mysql_query(conn, "SELECT * FROM books_info");
+	/*mysql_options(conn, MYSQL_SET_CHARSET_NAME, "utf-8");
+	mysql_options(conn, MYSQL_INIT_COMMAND, "SET NAMES utf-8");
+	mysql_query(conn, "set session character_set_connection=utf-8;");
+	mysql_query(conn, "set session character_set_results=utf-8;");
+	mysql_query(conn, "set session character_set_client=utf-8;");*/
+
+	query_stat = mysql_query(conn, "SELECT * FROM books_info");
 	if (query_stat != 0) {
-		fprintf(stderr, "Äõ¸®¿À·ù! : %s\n", mysql_error(conn));
+		fprintf(stderr, "ì¿¼ë¦¬ì˜¤ë¥˜! : %s\n", mysql_error(conn));  
+		mysql_close(conn);
 		return EXIT_FAILURE;
 	}
 
-	sql_result = mysql_store_result(conn);
-	while ((sql_row = mysql_fetch_row(sql_result)) != NULL) {
-		printf("%s\n", sql_row[0]);
-	}*/
+	result = mysql_store_result(conn);
+	num_fields = mysql_num_fields(result);
+	while (row = mysql_fetch_row(result)) {
+		lengths = mysql_fetch_lengths(result);
+		for (i = 0; i < num_fields; i++)
+		{
+			printf("[%.*s] ", (int)lengths[i], row[i] ? row[i] : "NULL");
+		}
+		printf("\n");
+	}
 
 	mysql_close(conn);
-	printf("¿¬°áÁ¾·á\n");
+	printf("ì—°ê²°ì¢…ë£Œ\n");
 	system("pause");
 	return EXIT_SUCCESS;
 }
