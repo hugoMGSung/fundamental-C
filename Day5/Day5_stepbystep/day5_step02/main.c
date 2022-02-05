@@ -1,4 +1,4 @@
-ï»¿#pragma comment (lib, "libmysql.lib")
+#pragma comment (lib, "libmysql.lib")
 
 #include <winsock.h>
 #include <windows.h>
@@ -25,17 +25,17 @@ int main() {
 
 	int i = 0;
 
-	setlocale(LC_ALL, "ko_KR.UTF-8");
+	setlocale(LC_ALL, "Korean");
 	conn = mysql_init(NULL);
 	mysql_real_connect(conn, mysqlip, loginusername, loginpassword, mysqlname, port, NULL, 0);
 
 	if (conn == NULL) {
-		fprintf(stderr, "ì—°ê²°ì˜¤ë¥˜! : %s\n", mysql_error(conn));
+		fprintf(stderr, "¿¬°á¿À·ù! : %s\n", mysql_error(conn));
 		return EXIT_FAILURE;
 	}
 
-	printf("ì—°ê²°ì„±ê³µ!\n");
-	printf("ì„œë²„ë²„ì „ %s\n", conn->server_version);
+	printf("¿¬°á¼º°ø!\n");
+	printf("¼­¹ö¹öÀü %s\n", conn->server_version);
 
 	/*mysql_options(conn, MYSQL_SET_CHARSET_NAME, "utf-8");
 	mysql_options(conn, MYSQL_INIT_COMMAND, "SET NAMES utf-8");
@@ -45,7 +45,7 @@ int main() {
 
 	query_stat = mysql_query(conn, "SELECT * FROM books_info");
 	if (query_stat != 0) {
-		fprintf(stderr, "ì¿¼ë¦¬ì˜¤ë¥˜! : %s\n", mysql_error(conn));  
+		fprintf(stderr, "Äõ¸®¿À·ù! : %s\n", mysql_error(conn));  
 		mysql_close(conn);
 		return EXIT_FAILURE;
 	}
@@ -62,7 +62,7 @@ int main() {
 	}
 
 	mysql_close(conn);
-	printf("ì—°ê²°ì¢…ë£Œ\n");
+	printf("¿¬°áÁ¾·á\n");
 	system("pause");
 	return EXIT_SUCCESS;
 }
