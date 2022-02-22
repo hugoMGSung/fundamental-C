@@ -1,7 +1,7 @@
-/* Ã¹¹øÂ° ÇÁ·Î±×·¥ */
+/* ê¸€ìì²´ ë¬¸ì œ, í˜„ì¬ ìš°ë¶„íˆ¬ */
 #include <stdio.h>
 
 void main(void) {
 	printf("Hello, World!\n");
-	printf("¾È³ç, ¼¼»ó¾Æ!\n");
+	printf("í•œê¸€ ë¬¸ì œ í•´ê²°!!\n");
 }
